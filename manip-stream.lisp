@@ -1,11 +1,9 @@
-(asdf:oos 'asdf:load-op :trivial-gray-streams)
-
-(use-package :trivial-gray-streams)
+(in-package :manip-stream)
 
 (defclass stream-manipulator ()
   ((action :accessor action-of
-:initarg :action
-:initform (lambda (manip-stream) (declare (ignore manip-stream)) nil))))
+	   :initarg :action
+	   :initform (lambda (manip-stream) (declare (ignore manip-stream)) nil))))
 
 (defclass manip-stream ()
   ((stream :accessor stream-of :initarg :stream :initform (error "Required :stream"))
@@ -15,7 +13,7 @@
   ((adjust-field :accessor adjust-field-of :initform :right)
    (showbase :accessor showbase-of :initform nil)
    (unit-buf :accessor unit-buf-of :initform nil) ;; 出力処理の旅に出力バッファをフラッシュするか
-   (width :accessor width-of :initform 0) ;; 最低の出力幅
+   (width :accessor width-of :initform 0)	  ;; 最低の出力幅
    (fill-char :accessor fill-char-of :initform #\Space)))
 
 (defgeneric set-flag (manip-stream flag &rest args))
@@ -132,9 +130,9 @@
 (defmacro << (manip-stream &rest args)
   (if args
       (let ((sym (gensym)))
-`(let ((,sym ,manip-stream))
-(write-string ,(car args) ,sym)
-(<< ,sym ,@(cdr args))))
+	`(let ((,sym ,manip-stream))
+	   (stream-write-string ,sym ,(car args))
+	   (<< ,sym ,@(cdr args))))
       manip-stream))
 
 
@@ -143,3 +141,4 @@
 ;; (set-fill #\-)
 ;; (set-width 10)
 ;; 12)
+
